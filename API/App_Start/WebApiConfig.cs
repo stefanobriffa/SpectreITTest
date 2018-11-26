@@ -1,0 +1,30 @@
+﻿using SpectreAPI.Filters;
+using SpectreAPI.Handlers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace SpectreAPI
+{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            // Web API configuration and services
+            config.MessageHandlers.Add(new SpectreDelegateHandler());
+            config.Filters.Add(new SpectreValidationActionFilter());
+            config.Filters.Add(new SpectreAPIExceptionFilter());
+
+            // Web API routes
+           config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
+    }
+}
